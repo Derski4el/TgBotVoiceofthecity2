@@ -1,0 +1,6 @@
+BOT_TOKEN = ""
+
+ADMIN_TELEGRAM_IDS = [""]
+
+ADMIN_API_USERNAME = "admin"
+ADMIN_API_PASSWORD = "admin"

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Точки{% endblock %}
+
+{% block content %}
+    <h2>Список точек</h2>
+
+    <!-- Simple Search Form -->
+    <div class="filter-card">
+        <h3>Поиск по названию точки</h3>
+        <form method="get" action="/bookings" class="simple-search-form">
+            <div class="search-row">
+                <div class="search-group">
+                    <input type="text" id="search" name="search" value="{{ search }}"
+                           placeholder="Введите название или адрес точки...">
+                </div>
+                <div class="search-actions">
+                    <button type="submit" class="btn btn-primary">Найти</button>
+                    <a href="/bookings" class="btn btn-secondary">Сбросить</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results Summary -->
+    <div class="results-summary">
+        {% if search %}
+            <p>Найдено <strong>{{ filtered_locations }}</strong> из <strong>{{ total_locations }}</strong> точек по запросу "{{ search }}"</p>
+            <p>Всего бронирований в найденных точках: <strong>{{ filtered_bookings }}</strong></p>
+        {% else %}
+            <p>Всего точек: <strong>{{ total_locations }}</strong></p>
+            <p>Всего бронирований: <strong>{{ total_bookings }}</strong></p>
+        {% endif %}
+    </div>
+
+    {% if locations_data %}
+        {% for location in locations_data %}
+            <div class="booking-card">
+                <div class="booking-header">
+                    <h3 class="booking-title">📍 {{ location.address }}</h3>
+                    <div class="booking-id">
+                        ID: {{ location.id }}
+                        <a href="/locations/{{ location.id }}/edit" class="btn-edit">Редактировать точку</a>
+                    </div>
+                </div>
+
+                {% if location.bookings %}
+                    <h4>Забронированные времена ({{ location.bookings|length }}):</h4>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Дата и время</th>
+                                    <th>ФИО</th>
+                                    <th>Телефон</th>
+                                    <th>Email</th>
+                                    <th>Продолжительность</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for booking in location.bookings %}
+                                    <tr>
+                                        <td>{{ booking.date }} {{ booking.time }}</td>
+                                        <td>
+                                            {% if booking.musician %}
+                                                {{ booking.musician.name }}
+                                            {% else %}
+                                                Не указано
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if booking.musician %}
+                                                {{ booking.musician.phone }}
+                                            {% else %}
+                                                Не указан
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if booking.musician %}
+                                                {{ booking.musician.email }}
+                                            {% else %}
+                                                Не указан
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ booking.duration }} час{% if booking.duration == 2 %}а{% endif %}</td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <a href="/bookings/{{ booking.id }}/edit" class="btn btn-primary">Редактировать</a>
+                                                <button onclick="deleteBooking('{{ booking.id }}', '{{ booking.date }} {{ booking.time }}')" class="btn btn-danger">Удалить</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="no-bookings">
+                        <p class="no-participants">📅 Нет забронированных времен</p>
+                        <p class="availability-note">Эта точка свободна для бронирования</p>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="card">
+            <p>{% if search %}По вашему запросу ничего не найдено.{% else %}Точки не найдены.{% endif %}</p>
+        </div>
+    {% endif %}
+
+    <script>
+        async function deleteBooking(bookingId, bookingTime) {
+            if (!confirm(`Вы уверены, что хотите удалить бронирование на ${bookingTime}?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/bookings/${bookingId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    alert(data.message);
+                    location.reload();
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                alert('Произошла ошибка при удалении бронирования');
+            }
+        }
+    </script>
+{% endblock %}

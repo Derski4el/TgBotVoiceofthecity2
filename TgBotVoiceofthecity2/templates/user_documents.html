@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Документы пользователя{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Документы пользователя</h2>
+        <div class="user-info">
+            <p><strong>ID:</strong> {{ user.id }}</p>
+            <p><strong>Имя:</strong> {{ user.first_name }}</p>
+            <p><strong>Фамилия:</strong> {{ user.second_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Telegram ID:</strong> {{ user.telegram_id }}</p>
+        </div>
+
+        {% if documents %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Название файла</th>
+                            <th>Дата загрузки</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in documents %}
+                            <tr>
+                                <td>{{ doc.name }}</td>
+                                <td>{{ doc.date }}</td>
+                                <td>
+                                    <a href="{{ doc.path }}" class="btn btn-primary" download>Скачать</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>У пользователя пока нет загруженных документов.</p>
+        {% endif %}
+
+        <div class="form-actions">
+            <a href="/users" class="btn btn-secondary">Назад к списку пользователей</a>
+        </div>
+    </div>
+{% endblock %} 

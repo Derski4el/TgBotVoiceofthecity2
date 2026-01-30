@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Главная{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Добро пожаловать в панель администратора</h2>
+        <p>Добро пожаловать в административную панель для Telegram-бота "Voice of the City".</p>
+        <p>Здесь вы можете управлять пользователями и точками.</p>
+        
+        <h3>Доступные разделы:</h3>
+        <ul>
+            <li><a href="/users">Пользователи</a> - Просмотр и управление пользователями системы</li>
+            <li><a href="/bookings">Точки</a> - Просмотр и управление точками и их участниками</li>
+        </ul>
+    </div>
+{% endblock %}

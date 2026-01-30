@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City - Результат верификации{% endblock %}
+
+{% block content %}
+    <div class="card">
+        {% if success %}
+            <h2 class="card-title success-title">Верификация успешна!</h2>
+            <div class="success-message">
+                <p>{{ message }}</p>
+                <p>Ваш email успешно подтвержден. Теперь вы можете использовать все функции системы.</p>
+            </div>
+        {% else %}
+            <h2 class="card-title error-title">Ошибка верификации</h2>
+            <div class="error-message">
+                <p>{{ message }}</p>
+                <p>Пожалуйста, запросите новую ссылку для верификации или обратитесь в службу поддержки.</p>
+            </div>
+        {% endif %}
+        
+        <div class="verification-actions">
+            <a href="https://t.me/your_bot_username" class="btn btn-primary">Вернуться к боту</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Отправка верификации{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Отправка верификации</h2>
+
+        <div class="user-info">
+            <p><strong>Пользователь:</strong> {{ user.first_name }} {{ user.patronymic }} {{ user.second_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }} {% if user.confirm_email %}<span class="status-true">(Подтвержден)</span>{% else %}<span class="status-false">(Не подтвержден)</span>{% endif %}</p>
+            <p><strong>Телефон:</strong> {{ user.phone }} {% if user.confirm_phone %}<span class="status-true">(Подтвержден)</span>{% else %}<span class="status-false">(Не подтвержден)</span>{% endif %}</p>
+        </div>
+
+        <form method="post" action="/users/{{ user.id }}/send-verification">
+            <div class="form-group">
+                <label for="verification_type">Тип верификации:</label>
+                <select id="verification_type" name="verification_type" required>
+                    <option value="email">Email</option>
+                    <option value="phone">Телефон</option>
+                </select>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Отправить</button>
+                <a href="/users/{{ user.id }}/edit" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Настройки Email{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Настройки Email</h2>
+
+        {% if success %}
+            <div class="alert alert-success">
+                {{ success }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="post" action="/email-settings">
+            <div class="form-group">
+                <label for="smtp_server">SMTP сервер:</label>
+                <input type="text" id="smtp_server" name="smtp_server" value="{{ settings.smtp_server }}" required>
+                <small>Например: smtp.gmail.com</small>
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_port">SMTP порт:</label>
+                <input type="text" id="smtp_port" name="smtp_port" value="{{ settings.smtp_port }}" required>
+                <small>Например: 587 для TLS или 465 для SSL</small>
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_username">SMTP имя пользователя:</label>
+                <input type="text" id="smtp_username" name="smtp_username" value="{{ settings.smtp_username }}" required>
+                <small>Обычно это ваш email адрес</small>
+            </div>
+
+            <div class="form-group">
+                <label for="smtp_password">SMTP пароль:</label>
+                <input type="password" id="smtp_password" name="smtp_password" value="{{ settings.smtp_password }}" required>
+                <small>Для Gmail используйте пароль приложения</small>
+            </div>
+
+            <div class="form-group">
+                <label for="email_from">Email отправителя:</label>
+                <input type="text" id="email_from" name="email_from" value="{{ settings.email_from }}" required>
+                <small>Например: Voice of the City &lt;your-email@gmail.com&gt;</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить настройки</button>
+            </div>
+        </form>
+
+        <div class="card test-email-card">
+            <h3>Отправить тестовое письмо</h3>
+            <form method="post" action="/test-email">
+                <div class="form-group">
+                    <label for="test_email">Email для теста:</label>
+                    <input type="email" id="test_email" name="test_email" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-secondary">Отправить тест</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

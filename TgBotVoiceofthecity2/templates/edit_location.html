@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Редактирование точки{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Редактирование точки</h2>
+
+        <form method="post" action="/locations/{{ location.id }}/edit">
+            <div class="form-group">
+                <label for="address">Название/адрес точки:</label>
+                <input type="text" id="address" name="address" value="{{ location.address }}" required>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <a href="/bookings" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

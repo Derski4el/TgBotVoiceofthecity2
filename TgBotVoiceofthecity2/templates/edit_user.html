@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Voice of the City Admin - Редактирование пользователя{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <h2 class="card-title">Редактирование пользователя</h2>
+
+        {% if request.query_params.get('message') %}
+            <div class="alert alert-success">
+                {{ request.query_params.get('message').replace('+', ' ') }}
+            </div>
+        {% endif %}
+
+        <form method="POST" class="edit-form">
+            <div class="form-group">
+                <label for="first_name">Имя:</label>
+                <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="patronymic">Отчество:</label>
+                <input type="text" id="patronymic" name="patronymic" value="{{ user.patronymic }}">
+            </div>
+
+            <div class="form-group">
+                <label for="second_name">Фамилия:</label>
+                <input type="text" id="second_name" name="second_name" value="{{ user.second_name }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                <div class="verification-status">
+                    Статус:
+                    {% if user.confirm_email %}
+                        <span class="status-true">Подтвержден</span>
+                    {% else %}
+                        <span class="status-false">Не подтвержден</span>
+                        <a href="/users/{{ user.id }}/send-verification" class="btn-small">Отправить верификацию</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Телефон:</label>
+                <input type="tel" id="phone" name="phone" value="{{ user.phone }}" required>
+                <div class="verification-status">
+                    Статус:
+                    {% if user.confirm_phone %}
+                        <span class="status-true">Подтвержден</span>
+                    {% else %}
+                        <span class="status-false">Не подтвержден</span>
+                        <a href="/users/{{ user.id }}/send-verification" class="btn-small">Отправить верификацию</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="role_id">Роль:</label>
+                <select id="role_id" name="role_id" required>
+                    {% for role in roles %}
+                        <option value="{{ role.id }}" {% if role.id == user.role_id %}selected{% endif %}>
+                            {{ role.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="confirm_email" {% if user.confirm_email %}checked{% endif %}>
+                    Email подтвержден
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="confirm_phone" {% if user.confirm_phone %}checked{% endif %}>
+                    Телефон подтвержден
+                </label>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <label>
+                    <input type="checkbox" name="verified" {% if user.verified %}checked{% endif %}>
+                    Подтвержден администратором
+                </label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                <a href="/users" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
